@@ -13,11 +13,23 @@ import apifunctions
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def preflight_groups_locked(ipaddr, sid):
+def preflight_groups_locked(ip_addr, sid):
     print("in groups_locked", end="<br>")
-    
-    
-    return(False) #default condition
+    if((apifunctions.object_is_locked(ip_addr, "Local-PreLoad-Assist", sid)) or (apifunctions.object_is_locked(ip_addr, "Local-ISS-Admin-Server", sid))):
+        print("a high level group is LOCKED", end="<br>")
+        return(True)
+    else:
+        print("Main groups are unlocked", end="<br>")
+        return(False)
+    """
+    Local-PreLoad-Assist
+    Local-ISS-Admin-Server
+    SSPC-SICK
+    SPIDR_Hubs
+    SSPC-Autodim
+    FXG-SGS
+    """
+#end of preflight_group_locked()
 
 def preflight_objects_valid(sgshost, sickhost, autodim, spidr, admin_ipaddr, preload_ipaddr1, preload_ipaddr2):
     print("in objects_valid", end="<br>")
@@ -26,10 +38,10 @@ def preflight_objects_valid(sgshost, sickhost, autodim, spidr, admin_ipaddr, pre
         return(True)
     else:
         return(False)
-
+#end of preflight_objects_valid
 
 def preflight_host_group_valid(grp):
-    print("in host group valid")
+    print("in host group valid", end="<br>")
 
     for host in grp:
         if(preflight_host_valid(host) == False):
@@ -39,7 +51,7 @@ def preflight_host_group_valid(grp):
 #end of preflight_host_group_valid
 
 def preflight_host_valid(address):
-    print("in host_valid")
+    print("in host_valid", end="<br>")
 
     try:
         if(ipaddress.ip_address(address)):
@@ -144,15 +156,31 @@ def main():
 
     #if((preflight_host_group_valid(sgshost) == True) and (preflight_host_group_valid(sickhost) == True) and (preflight_host_group_valid(autodim) == True) and (preflight_host_group_valid(spidr) == True) and (preflight_host_valid(admin_ipaddr) == True) and (preflight_host_valid(preload_ipaddr1) == True) and (preflight_host_valid(preload_ipaddr2) == True) ):
     
+    #login to MDS
+    sid = apifunctions.login(userid, passwd, ip_addr, ip_cma)
 
-    if((preflight_objects_valid(sgshost, sickhost, autodim, spidr, admin_ipaddr, preload_ipaddr1, preload_ipaddr2) == True) and (preflight_groups_locked() == False)):
+    if(debug == 1):
+        print("session id : " + sid, end="<br>")
+
+    
+
+    if((preflight_objects_valid(sgshost, sickhost, autodim, spidr, admin_ipaddr, preload_ipaddr1, preload_ipaddr2) == True) and (preflight_groups_locked(ip_addr, sid) == False)):
         print("Pre-Flight Checks Complete", end="<br>")
     else:
         print("<h1>STOP postoji pogreška</h1>", end="<br>")
 
     ### Logout Info
+    print("Start of Publish ... zzzzzz", end="<br>")
+    time.sleep(5)
+    publish_result = apifunctions.api_call(ip_addr, "publish", {}, sid)
+    print("Publish Result : " + json.dumps(publish_result), end="<br>")
 
-    print("------- end of program -------")
+    time.sleep(20)
+
+    logout_result = apifunctions.api_call(ip_addr, "logout", {}, sid)
+    print(logout_result, end="<br>")
+
+    print("------- end of program -------", end="<br>")
     print("<br><br>")
     print("</body>")
     print("</html>")
