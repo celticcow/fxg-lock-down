@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>Ground Hub Lock Down</title>
+    </head>
+
+    <body>
+        Ground Hub Input Form<br>
+
+        <form method="get" action="./fxglockbuild.py" id="form1">
+            Provider1 Creds:<br>
+            UserID: <input id='user' type="text" size="20" maxlength="20" name="user"><br>
+            Passwd: <input id='password' type="password" size="20" maxlength="20" name="password"><br>
+            <br>
+            <br>
+            SiteName:<input id='sitename' type="text" size="4" maxlength="4" name="sitename"><br>
+            SiteNum : <input id='sitenumber' type="text" size="4" maxlength="4" name="sitenumber"><br>
+            <br>
+            <br>
+            SGS Hosts<br>
+            <textarea id='sgshosts' type="text" cols="15" rows="20" name="sgshosts"></textarea>
+            <br><br>
+            SICK Hosts<br>
+            <textarea id='sickhosts' type="text" cols="15" rows="20" name="sickhosts"></textarea>
+            <br><br>
+            AutoDim Hosts<br>
+            <textarea id='autodimhosts' type="text" cols="15" rows="20" name="audimhosts"></textarea>
+            <br><br>
+            SPIDR Hub Hosts<br>
+            <textarea id='spidrhosts' type="text" cols="15" rows="20" name="spidrhosts"></textarea>
+            <br><br>
+            Local Admin Server (fs[site_name]admn01.ground.fedex.com) <br>
+            hostname : <input id='adminname' type="text" size="30" maxlength="29" name="adminname"><br>
+            IP Addr  : <input id='adminip' type="text" size="15" maxlength="15" name="adminip"<br>
+            <br><br> 
+            Pre-Load Assist (fp0[site_number/alt_number]a[1,2].ground.fedex.com) <br>
+            pre-load hostname1 : <input id='preloadhostname1' type="text" size="26" maxlength="25" name="preloadhostname1"><br>
+            pre-load IP Addr 1 : <input id='preloadipaddr1' type="text" size="15" maxlength="15" name="preloadipaddr1"><br>
+            pre-load hostname2 : <input id='preloadhostname2' type="text" size="26" maxlength="25" name="preloadhostname2"><br>
+            pre-load IP Addr 2 : <input id='preloadipaddr2' type="text" size="15" maxlength="15" name="preloadipaddr2"><br>
+            <input type="submit" value="submit" name="submit"><br>
+        </form>
+
+    </body>
+</html>
