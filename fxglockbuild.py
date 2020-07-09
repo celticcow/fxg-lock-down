@@ -15,7 +15,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def preflight_groups_locked(ip_addr, sid):
     print("in groups_locked", end="<br>")
-    if((apifunctions.object_is_locked(ip_addr, "Local-PreLoad-Assist", sid)) or (apifunctions.object_is_locked(ip_addr, "Local-ISS-Admin-Server", sid))):
+    if((apifunctions.object_is_locked(ip_addr, "Local-Preload-Assist", sid)) or (apifunctions.object_is_locked(ip_addr, "Local-ISS-Admin-Server", sid)) or (apifunctions.object_is_locked(ip_addr, "SSPC-Autodim", sid)) or (apifunctions.object_is_locked(ip_addr, "SSPC-SICK", sid)) or (apifunctions.object_is_locked(ip_addr, "SPIDR_Hubs", sid)) or (apifunctions.object_is_locked(ip_addr, "FXG-SGS", sid))): 
         print("a high level group is LOCKED", end="<br>")
         return(True)
     else:
@@ -66,6 +66,19 @@ def preflight_host_valid(address):
         return(False)
 #end of preflight_host_valid
 
+def build_group_and_hosts(maingrp, localgroup, hostlist, prefix, ip_addr, sid):
+    print("in build_group_and_host()", end="<br>")
+
+    ## create a group ##
+    #apifunctions.add_a_group(ip_addr, localgroup, sid)
+
+    ## add localgroup to maingrp
+
+    for x in hostlist:
+        print(x, end="<br>")
+        ## add host and add to local group
+
+
 """
 """
 
@@ -100,12 +113,12 @@ def main():
 
 
     ## html header and config data dump
-    print ("Content-type:text/html\r\n\r\n")
-    print ("<html>")
-    print ("<head>")
-    print ("<title>Lock Down Build</title>")
-    print ("</head>")
-    print ("<body>")
+    print("Content-type:text/html\r\n\r\n")
+    print("<html>")
+    print("<head>")
+    print("<title>Lock Down Build</title>")
+    print("</head>")
+    print("<body>")
 
 
     #### to be removed later ####
@@ -166,6 +179,10 @@ def main():
 
     if((preflight_objects_valid(sgshost, sickhost, autodim, spidr, admin_ipaddr, preload_ipaddr1, preload_ipaddr2) == True) and (preflight_groups_locked(ip_addr, sid) == False)):
         print("Pre-Flight Checks Complete", end="<br>")
+        ### begin work
+        build_group_and_hosts("FXG-SGS", site_name+"-"+site_num+"-SGS", sgshost, "sgs-", ip_addr, sid)
+        ##def build_group_and_hosts(maingrp, localgroup, hostlist, prefix, ip_addr, sid):
+
     else:
         print("<h1>STOP postoji pogreška</h1>", end="<br>")
 
