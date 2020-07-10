@@ -189,7 +189,7 @@ def main():
 
     if((preflight_objects_valid(sgshost, sickhost, autodim, spidr, admin_ipaddr, preload_ipaddr1, preload_ipaddr2) == True) and (preflight_groups_locked(ip_addr, sid) == False)):
         print("Pre-Flight Checks Complete", end="<br>")
-        ### begin work
+        ### create objects and groups
         build_group_and_hosts("FXG-SGS", site_name+"-"+site_num+"-SGS", sgshost, "sgs-", ip_addr, sid)
         build_group_and_hosts("SPIDR_Hubs", "SPIDR_Hubs-"+site_name+"-"+site_num, spidr, "spidr-", ip_addr, sid)
         build_group_and_hosts("SSPC-SICK", "SSPC-SICK-"+site_name+"-"+site_num, sickhost, "sick-", ip_addr, sid)
@@ -198,6 +198,71 @@ def main():
         apifunctions.add_a_host_with_group(ip_addr, admin_name, admin_ipaddr, "Local-ISS-Admin-Server", sid)
         apifunctions.add_a_host_with_group(ip_addr, preload_name1, preload_ipaddr1, "Local-Preload-Assist", sid)
         apifunctions.add_a_host_with_group(ip_addr, preload_name2, preload_ipaddr2, "Local-Preload-Assist", sid)
+
+        ### create rules ... yea ... crazy huh
+
+        ### Section Header : SGS
+        add_sgs_rule1 = {
+            "layer" : "HubLab Network",
+            "position" : {
+                "bottom" : "SGS"
+            },
+            "name" : "SGSCatch1" + site_name,
+            "destination" : site_name+"-"+site_num+"-SGS",
+            "action" : "Accept",
+            "track" : "Log",
+            "install-on" : "fw-fxg-hubs"
+        }
+
+        add_sgs_rule2 = {
+            "layer" : "HubLab Network",
+            "position" : {
+                "bottom" : "SGS"
+            },
+            "name" : "SGSCatch2" + site_name,
+            "source" : site_name+"-"+site_num+"-SGS",
+            "action" : "Accept",
+            "track" : "Log",
+            "install-on" : "fw-fxg-hubs"
+        }
+
+        sgs_rule1_result = apifunctions.api_call(ip_addr, "add-access-rule", add_sgs_rule1, sid)
+        sgs_rule2_result = apifunctions.api_call(ip_addr, "add-access-rule", add_sgs_rule2, sid)
+
+        ### Section Header : ISS
+        add_iss_rule1 = {
+            "layer" : "HubLab Network",
+            "position" : {
+                "bottom" : "ISS"
+            },
+            "name" : "ISSCatch1" + site_name,
+            "destination" : site_name+"-"+site_num+"-ISS",
+            "action" : "Accept",
+            "track" : "Log",
+            "install-on" : "fw-fxg-hubs"
+        }
+
+        add_iss_rule2 = {
+            "layer" : "HubLab Network",
+            "position" : {
+                "bottom" : "ISS"
+            },
+            "name" : "ISSCatch2" + site_name,
+            "source" : site_name+"-"+site_num+"-ISS",
+            "action" : "Accept",
+            "track" : "Log",
+            "install-on" : "fw-fxg-hubs"
+        }
+
+        iss_rule1_result = apifunctions.api_call(ip_addr, "add-access-rule", add_iss_rule1, sid)
+        iss_rule2_result = apifunctions.api_call(ip_addr, "add-access-rule", add_iss_rule2, sid)
+
+        if(debug == 1):
+            print("<br>Rule Add Debug<br>")
+            print(json.dumps(sgs_rule1_result), end="<br>")
+            print(json.dumps(sgs_rule2_result), end="<br>")
+            print(json.dumps(iss_rule1_result), end="<br>")
+            print(json.dumps(iss_rule2_result), end="<br>")
 
     else:
         print("<h1>STOP postoji pogreška</h1>", end="<br>")
