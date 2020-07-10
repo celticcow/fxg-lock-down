@@ -69,15 +69,25 @@ def preflight_host_valid(address):
 def build_group_and_hosts(maingrp, localgroup, hostlist, prefix, ip_addr, sid):
     print("in build_group_and_host()", end="<br>")
 
+    debug = 1
+
     ## create a group ##
-    #apifunctions.add_a_group(ip_addr, localgroup, sid)
+    apifunctions.add_a_group(ip_addr, localgroup, sid)
+    apifunctions.add_group_to_group(ip_addr, localgroup, maingrp, sid)
 
     ## add localgroup to maingrp
 
     for x in hostlist:
-        print(x, end="<br>")
-        ## add host and add to local group
+        if(debug == 1):
+            print("<br>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br>")
+            print(x, end="<br>")
+            print(prefix, end="<br>")
+            print(localgroup, end="<br>")
+            print("<br>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^<br>")
 
+        apifunctions.add_a_host_with_group(ip_addr, prefix+x, x, localgroup, sid)
+        ## add host and add to local group
+#end of build_group_and_hosts
 
 """
 """
@@ -181,7 +191,13 @@ def main():
         print("Pre-Flight Checks Complete", end="<br>")
         ### begin work
         build_group_and_hosts("FXG-SGS", site_name+"-"+site_num+"-SGS", sgshost, "sgs-", ip_addr, sid)
-        ##def build_group_and_hosts(maingrp, localgroup, hostlist, prefix, ip_addr, sid):
+        build_group_and_hosts("SPIDR_Hubs", "SPIDR_Hubs-"+site_name+"-"+site_num, spidr, "spidr-", ip_addr, sid)
+        build_group_and_hosts("SSPC-SICK", "SSPC-SICK-"+site_name+"-"+site_num, sickhost, "sick-", ip_addr, sid)
+        build_group_and_hosts("SSPC-Autodim", "SSPC-Autodim-"+site_name+"-"+site_num, autodim, "autodim-", ip_addr, sid)
+        
+        apifunctions.add_a_host_with_group(ip_addr, admin_name, admin_ipaddr, "Local-ISS-Admin-Server", sid)
+        apifunctions.add_a_host_with_group(ip_addr, preload_name1, preload_ipaddr1, "Local-Preload-Assist", sid)
+        apifunctions.add_a_host_with_group(ip_addr, preload_name2, preload_ipaddr2, "Local-Preload-Assist", sid)
 
     else:
         print("<h1>STOP postoji pogreška</h1>", end="<br>")
