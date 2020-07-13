@@ -101,8 +101,8 @@ def main():
     userid = form.getvalue('user')
     passwd = form.getvalue('password')
 
-    ip_addr = "146.18.96.16"
-    ip_cma  = "146.18.96.25"
+    ip_addr = "204.135.121.150"
+    ip_cma  = "204.135.121.164"
 
     ### get form data fields
     site_name = form.getvalue('sitename')
@@ -129,7 +129,9 @@ def main():
     print("<title>Lock Down Build</title>")
     print("</head>")
     print("<body>")
-
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+    print(current_time, end="<br>")
 
     #### to be removed later ####
     #print(userid, end="<br>")
@@ -189,18 +191,42 @@ def main():
 
     if((preflight_objects_valid(sgshost, sickhost, autodim, spidr, admin_ipaddr, preload_ipaddr1, preload_ipaddr2) == True) and (preflight_groups_locked(ip_addr, sid) == False)):
         print("Pre-Flight Checks Complete", end="<br>")
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
         ### create objects and groups
         build_group_and_hosts("FXG-SGS", site_name+"-"+site_num+"-SGS", sgshost, "sgs-", ip_addr, sid)
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
         build_group_and_hosts("SPIDR_Hubs", "SPIDR_Hubs-"+site_name+"-"+site_num, spidr, "spidr-", ip_addr, sid)
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
         build_group_and_hosts("SSPC-SICK", "SSPC-SICK-"+site_name+"-"+site_num, sickhost, "sick-", ip_addr, sid)
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
         build_group_and_hosts("SSPC-Autodim", "SSPC-Autodim-"+site_name+"-"+site_num, autodim, "autodim-", ip_addr, sid)
-        
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
         apifunctions.add_a_host_with_group(ip_addr, admin_name, admin_ipaddr, "Local-ISS-Admin-Server", sid)
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
         apifunctions.add_a_host_with_group(ip_addr, preload_name1, preload_ipaddr1, "Local-Preload-Assist", sid)
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
         apifunctions.add_a_host_with_group(ip_addr, preload_name2, preload_ipaddr2, "Local-Preload-Assist", sid)
-
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
+        
+        """
         ### create rules ... yea ... crazy huh
-
+        
         ### Section Header : SGS
         add_sgs_rule1 = {
             "layer" : "HubLab Network",
@@ -228,6 +254,9 @@ def main():
 
         sgs_rule1_result = apifunctions.api_call(ip_addr, "add-access-rule", add_sgs_rule1, sid)
         sgs_rule2_result = apifunctions.api_call(ip_addr, "add-access-rule", add_sgs_rule2, sid)
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
 
         ### Section Header : ISS
         add_iss_rule1 = {
@@ -256,6 +285,10 @@ def main():
 
         iss_rule1_result = apifunctions.api_call(ip_addr, "add-access-rule", add_iss_rule1, sid)
         iss_rule2_result = apifunctions.api_call(ip_addr, "add-access-rule", add_iss_rule2, sid)
+        
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time, end="<br>")
 
         if(debug == 1):
             print("<br>Rule Add Debug<br>")
@@ -263,7 +296,7 @@ def main():
             print(json.dumps(sgs_rule2_result), end="<br>")
             print(json.dumps(iss_rule1_result), end="<br>")
             print(json.dumps(iss_rule2_result), end="<br>")
-
+        """
     else:
         print("<h1>STOP postoji pogreška</h1>", end="<br>")
 
