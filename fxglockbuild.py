@@ -224,12 +224,12 @@ def main():
         current_time = time.strftime("%H:%M:%S", t)
         print(current_time, end="<br>")
         
-        """
+        
         ### create rules ... yea ... crazy huh
         
         ### Section Header : SGS
         add_sgs_rule1 = {
-            "layer" : "HubLab Network",
+            "layer" : "7VRF_FXG-Hub Security",
             "position" : {
                 "bottom" : "SGS"
             },
@@ -237,11 +237,11 @@ def main():
             "destination" : site_name+"-"+site_num+"-SGS",
             "action" : "Accept",
             "track" : "Log",
-            "install-on" : "fw-fxg-hubs"
+            "install-on" : "ece86de0-162e-452f-93b4-e8ab77c265e9"
         }
 
         add_sgs_rule2 = {
-            "layer" : "HubLab Network",
+            "layer" : "7VRF_FXG-Hub Security",
             "position" : {
                 "bottom" : "SGS"
             },
@@ -249,7 +249,7 @@ def main():
             "source" : site_name+"-"+site_num+"-SGS",
             "action" : "Accept",
             "track" : "Log",
-            "install-on" : "fw-fxg-hubs"
+            "install-on" : "ece86de0-162e-452f-93b4-e8ab77c265e9"
         }
 
         sgs_rule1_result = apifunctions.api_call(ip_addr, "add-access-rule", add_sgs_rule1, sid)
@@ -260,7 +260,7 @@ def main():
 
         ### Section Header : ISS
         add_iss_rule1 = {
-            "layer" : "HubLab Network",
+            "layer" : "7VRF_FXG-Hub Security",
             "position" : {
                 "bottom" : "ISS"
             },
@@ -268,11 +268,11 @@ def main():
             "destination" : site_name+"-"+site_num+"-ISS",
             "action" : "Accept",
             "track" : "Log",
-            "install-on" : "fw-fxg-hubs"
+            "install-on" : "ece86de0-162e-452f-93b4-e8ab77c265e9"
         }
 
         add_iss_rule2 = {
-            "layer" : "HubLab Network",
+            "layer" : "7VRF_FXG-Hub Security",
             "position" : {
                 "bottom" : "ISS"
             },
@@ -280,7 +280,7 @@ def main():
             "source" : site_name+"-"+site_num+"-ISS",
             "action" : "Accept",
             "track" : "Log",
-            "install-on" : "fw-fxg-hubs"
+            "install-on" : "ece86de0-162e-452f-93b4-e8ab77c265e9"
         }
 
         iss_rule1_result = apifunctions.api_call(ip_addr, "add-access-rule", add_iss_rule1, sid)
@@ -296,7 +296,7 @@ def main():
             print(json.dumps(sgs_rule2_result), end="<br>")
             print(json.dumps(iss_rule1_result), end="<br>")
             print(json.dumps(iss_rule2_result), end="<br>")
-        """
+        
     else:
         print("<h1>STOP postoji pogreška</h1>", end="<br>")
 
